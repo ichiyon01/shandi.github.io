@@ -109,7 +109,7 @@ export default function LeftSidebar({
         </motion.h2>
 
         <p className="mt-4 max-w-xs leading-normal text-slate-400">
-          {roleIndex === 0 && "Mengelola jaringan dan infrastruktur IT secara efisien."}
+          {roleIndex === 0 && "Bertanggung jawab atas instalasi, konfigurasi, pemeliharaan, dan pemantauan jaringan agar tetap stabil dan aman."}
           {roleIndex === 1 && "Mengembangkan model AI untuk pemrosesan data cerdas."}
           {roleIndex === 2 && "Membangun aplikasi web end-to-end yang skalabel."}
           {roleIndex === 3 && "Menganalisis data untuk menghasilkan insight strategis."}
