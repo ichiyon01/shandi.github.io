@@ -126,28 +126,28 @@ export default function Home() {
         id="right-content"
         className="w-full pt-24 lg:w-2/3 lg:py-24 lg:pr-24 lg:h-screen lg:overflow-y-auto"
       >
-        <div id="content" className="flex flex-col gap-8 px-8 md:gap-22 md:px-32">
-          <section ref={aboutRef} id="about" className="min-h-screen">
+        <div id="content" className="flex flex-col gap-20 px-8 md:px-32">
+          <section ref={aboutRef} id="about" className="py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="About" />
             <AboutSection />
           </section>
 
-          <section ref={experienceRef} id="experience" className="min-h-screen">
+          <section ref={experienceRef} id="experience" className="py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Experience" />
             <ExperienceSection />
           </section>
 
-          <section ref={skillsRef} id="skills" className="min-h-screen">
+          <section ref={skillsRef} id="skills" className="py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Skills" />
             <SkillsSection />
           </section>
 
-          <section ref={portofolioRef} id="portofolio" className="min-h-screen">
+          <section ref={portofolioRef} id="portofolio" className="py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Portofolio" />
             <PortofolioSection />
           </section>
 
-          <section ref={projectsRef} id="projects" className="min-h-screen">
+          <section ref={projectsRef} id="projects" className="py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Projects" />
             <ProjectsSection />
           </section>

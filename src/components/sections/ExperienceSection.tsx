@@ -39,7 +39,7 @@ const ExperienceSection = forwardRef<HTMLElement>((props, ref) => {
         Experience
       </h2> */}
       
-      <div className="mt-8 flex flex-col gap-12">
+      <div className="mt-4 flex flex-wrap gap-2">
         {EXPERIENCE_DATA.map((exp, index) => (
           <a
             key={index}

@@ -81,7 +81,7 @@ const PortofolioSection = forwardRef<HTMLElement>((props, ref) => {
     <section id="portofolio" ref={ref} className="scroll-mt-24">
 
       {/* Filter Buttons */}
-      <div className="mt-8 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-2">
         {CATEGORIES.map((category) => (
           <button
             key={category.name}

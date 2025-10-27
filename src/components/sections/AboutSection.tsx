@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 
 const AboutSection = forwardRef<HTMLElement>((props, ref) => {
   return (
-    <section id="about" ref={ref} className="p-4 md:p-4">
+    <section id="about" ref={ref} className="scroll-mt-24">
       <p className="mt-6 leading-relaxed text-slate-400">
         Hello! My name is <span className="text-white font-semibold">Shandi Adhitya</span>, and I am an{" "}
         <span className="text-white">AI Engineer</span>,{" "}
