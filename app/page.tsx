@@ -1,65 +1,158 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect, useRef } from "react";
+import LeftSidebar from "@/src/components/layout/LeftSidebar";
+import AboutSection from "@/src/components/sections/AboutSection";
+import ProjectsSection from "@/src/components/sections/ProjectsSection";
+import ExperienceSection from "@/src/components/sections/ExperienceSection";
+import SkillsSection from "@/src/components/sections/SkillsSection";
+import PortofolioSection from "@/src/components/sections/PortofolioSection";
+import SectionHeader from "../components/ui/SectionHeader";
+
+export type SectionId =
+  | "about"
+  | "experience"
+  | "skills"
+  | "portofolio"
+  | "projects";
 
 export default function Home() {
+  const [activeSection, setActiveSection] = useState<SectionId>("about");
+  const [manualActive, setManualActive] = useState(false);
+
+  // Refs untuk setiap section
+  const aboutRef = useRef<HTMLElement>(null);
+  const experienceRef = useRef<HTMLElement>(null);
+  const skillsRef = useRef<HTMLElement>(null);
+  const portofolioRef = useRef<HTMLElement>(null);
+  const projectsRef = useRef<HTMLElement>(null);
+
+  // Handler klik menu sidebar
+  const handleMenuClick = (section: SectionId) => {
+    setManualActive(true);
+    setActiveSection(section);
+
+    const sectionRef = {
+      about: aboutRef,
+      experience: experienceRef,
+      skills: skillsRef,
+      portofolio: portofolioRef,
+      projects: projectsRef,
+    }[section];
+
+    const container = document.getElementById("right-content");
+    const isMobile = window.innerWidth < 1024; // breakpoint lg
+
+    if (sectionRef.current) {
+      const element = sectionRef.current;
+
+      if (isMobile) {
+        // 🔹 Scroll pakai window di mobile
+        const top = element.getBoundingClientRect().top + window.scrollY - 80;
+        window.scrollTo({ top, behavior: "smooth" });
+      } else if (container) {
+        // 🔹 Scroll pakai container di desktop
+        const elementTop =
+          element.getBoundingClientRect().top -
+          container.getBoundingClientRect().top +
+          container.scrollTop;
+        const offset = container.clientHeight * 0.1;
+        container.scrollTo({
+          top: elementTop - offset,
+          behavior: "smooth",
+        });
+      }
+    }
+
+    // 🔹 Tunda agar observer tidak langsung override manual
+    setTimeout(() => setManualActive(false), 1200);
+  };
+
+  // Observer untuk mendeteksi section aktif
+  useEffect(() => {
+    const sectionRefs = [
+      { id: "about", ref: aboutRef },
+      { id: "experience", ref: experienceRef },
+      { id: "skills", ref: skillsRef },
+      { id: "portofolio", ref: portofolioRef },
+      { id: "projects", ref: projectsRef },
+    ];
+
+    const isMobile = window.innerWidth < 1024;
+    const container = document.getElementById("right-content");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (manualActive) return;
+
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (visible) {
+          const id = visible.target.id as SectionId;
+          if (id !== activeSection) setActiveSection(id);
+        }
+      },
+      {
+        root: isMobile ? null : container,
+        threshold: [0.3, 0.6, 0.9],
+        rootMargin: "-20% 0px -40% 0px",
+      }
+    );
+
+    sectionRefs.forEach(({ ref }) => {
+      if (ref.current) observer.observe(ref.current);
+    });
+
+    return () => {
+      sectionRefs.forEach(({ ref }) => {
+        if (ref.current) observer.unobserve(ref.current);
+      });
+      observer.disconnect();
+    };
+  }, [manualActive, activeSection]);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="relative flex min-h-screen flex-col bg-slate-900 lg:flex-row">
+      {/* Sidebar */}
+      <LeftSidebar
+        activeSection={activeSection}
+        setActiveSection={handleMenuClick}
+      />
+
+      {/* Konten kanan */}
+      <div
+        id="right-content"
+        className="w-full pt-24 lg:w-2/3 lg:py-24 lg:pr-24 lg:h-screen lg:overflow-y-auto"
+      >
+        <div id="content" className="flex flex-col gap-8 px-8 md:gap-22 md:px-32">
+          <section ref={aboutRef} id="about" className="min-h-screen">
+            <SectionHeader title="About" />
+            <AboutSection />
+          </section>
+
+          <section ref={experienceRef} id="experience" className="min-h-screen">
+            <SectionHeader title="Experience" />
+            <ExperienceSection />
+          </section>
+
+          <section ref={skillsRef} id="skills" className="min-h-screen">
+            <SectionHeader title="Skills" />
+            <SkillsSection />
+          </section>
+
+          <section ref={portofolioRef} id="portofolio" className="min-h-screen">
+            <SectionHeader title="Portofolio" />
+            <PortofolioSection />
+          </section>
+
+          <section ref={projectsRef} id="projects" className="min-h-screen">
+            <SectionHeader title="Projects" />
+            <ProjectsSection />
+          </section>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
