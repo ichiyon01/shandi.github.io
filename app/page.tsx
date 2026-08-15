@@ -132,22 +132,22 @@ export default function Home() {
             <AboutSection />
           </section>
 
-          <section ref={experienceRef} id="experience" className="py-8 md:py-8 scroll-mt-24">
+          <section ref={experienceRef} id="experience" className="hidden py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Experience" />
             <ExperienceSection />
           </section>
 
-          <section ref={skillsRef} id="skills" className="py-8 md:py-8 scroll-mt-24">
+          <section ref={skillsRef} id="skills" className="hidden py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Skills" />
             <SkillsSection />
           </section>
 
-          <section ref={portofolioRef} id="portofolio" className="py-8 md:py-8 scroll-mt-24">
+          <section ref={portofolioRef} id="portofolio" className="hidden py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Portofolio" />
             <PortofolioSection />
           </section>
 
-          <section ref={projectsRef} id="projects" className="py-8 md:py-8 scroll-mt-24">
+          <section ref={projectsRef} id="projects" className="hidden py-8 md:py-8 scroll-mt-24">
             <SectionHeader title="Projects" />
             <ProjectsSection />
           </section>
